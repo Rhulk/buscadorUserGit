@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub search</title>
+    <link rel="stylesheet" href="css/main.css">
+    <script src="https://unpkg.com/vue@3"></script>
+</head>
+
+<body>
+    <div id="app">
+        <!-- Favorites -->
+        <div class="favorites">
+            <div class="favorite" v-for="favorite in allFavorites">
+                <a href="#" target="_blank" @click.prevent="showFavorite(favorite)">
+                    <img :src="favorite.avatar_url" :alt="favorite.name" class="favorite__avatar">
+                </a>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <article class="content">
+            <h1 class="content__title">{{message}} count: {{count}} </h1>
+            <button @click="increment">{{ count }}</button>
+            <!-- Search -->
+            <form class="search" v-on:submit.prevent="doSearch">
+                <input v-model="search" type="text" class="search__input" required placeholder="Search GitHub users">
+                <input  type="submit" class="search__submit" value="Search">
+            </form>
+
+            <!-- Result -->
+            <div class="result" v-if="result">
+                <a v-if="isFavorite" href="#" class="result__toggle-favorite" @click="removeFavorite">Remove Favorite
+                    ⭐️</a>
+                <a v-else href="#" class="result__toggle-favorite" @click="addFavorite">Add Favorite ⭐️</a>
+                <h2 class="result__name" >{{ result.name }}</h2>
+                <img v-bind:src="result.avatar_url" :alt="result.name" class="result__avatar">
+                <p class="result__bio">{{ result.bio }} <br>
+                    <a v-bind:href="result.blog" target="_blank" class="result__blog">{{ result.blog }}</a>
+                </p>
+            </div>
+            <!-- Error -->
+            <div class="result__error" v-if="error">
+                <h2 class="result__name">{{error}}</h2>
+            </div>
+        </article>
+    </div>
+    <script src="js/main.js"></script>
+    <script>
+        const mountedApp = app.mount("#app")
+    </script>
+</body>
+
+</html>
