@@ -13,13 +13,16 @@
 <body>
     <div id="app">
         <!-- Favorites -->
-        <div class="favorites">
-            <div class="favorite" v-for="favorite in allFavorites">
-                <a href="#" target="_blank" @click.prevent="showFavorite(favorite)">
-                    <img :src="favorite.avatar_url" :alt="favorite.name" class="favorite__avatar">
-                </a>
+            <div class="favorites">
+                <transition-group name="list"> 
+                <div class="favorite" v-for="favorite in allFavorites" :key="favorite.id">
+                    <a href="#" target="_blank" @click.prevent="showFavorite(favorite)">
+                        <img :src="favorite.avatar_url" :alt="favorite.name" class="favorite__avatar">
+                    </a>
+                </div>
+                </transition-group>
             </div>
-        </div>
+         
 
         <!-- Content -->
         <article class="content">
@@ -32,6 +35,7 @@
             </form>
 
             <!-- Result -->
+            <Transition>
             <div class="result" v-if="result">
                 <a v-if="isFavorite" href="#" class="result__toggle-favorite" @click="removeFavorite">Remove Favorite
                     ⭐️</a>
@@ -42,6 +46,7 @@
                     <a v-bind:href="result.blog" target="_blank" class="result__blog">{{ result.blog }}</a>
                 </p>
             </div>
+            </Transition>
             <!-- Error -->
             <div class="result__error" v-if="error">
                 <h2 class="result__name">{{error}}</h2>
