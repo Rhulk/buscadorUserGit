@@ -27,7 +27,7 @@
         <!-- Content -->
         <article class="content">
             <h1 class="content__title">{{message}} count: {{count}} </h1>
-            <button @click="increment">{{ count }}</button>
+            
             <!-- Search -->
             <form class="search" v-on:submit.prevent="doSearch">
                 <input v-model="search" type="text" class="search__input" required placeholder="Search GitHub users">
