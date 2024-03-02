@@ -260,3 +260,67 @@ Ahora solo tenemos que aplicarla la clase **favorite--selected** de forma dinám
 
 ## Enlaces
 * https://vuejs.org/guide/essentials/class-and-style.html
+
+**18.- Introducción a componentes**
+
+En esta última lección del Curso de Vue 3 daremos el primer paso para entender cómo funcionan los componentes, algo que veremos en profundidad más adelante en otros cursos.<br>
+
+La arquitectura de componentes es la base de Vue y una de las principales ventajas a la hora de usar frameworks como este, ya que prácticamente todo puede convertirse en un componente para utilizarse (y reutilizarse) de forma modular.<br>
+
+Para entender de qué estamos hablando vamos a mover a un componente toda la lógica y estructura que se encarga de mostrar el perfil de GitHub que hemos encontrado. Lo llamaremos **AppProfile.js**. Este es el aspecto que tiene.<br>
+
+```js
+app.component("app-profile", {
+    template:`
+    <div class="result" v-if="result">
+        <a v-if="isFavorite" href="#" class="result__toggle-favorite" @click="removeFavorite">Remove Favorite
+            ⭐️</a>
+        <a v-else href="#" class="result__toggle-favorite" @click="addFavorite">Add Favorite ⭐️</a>
+        <h2 class="result__name">{{ result.name }}</h2>
+        <img v-bind:src="result.avatar_url" :alt="result.name" class="result__avatar">
+        <p class="result__bio">{{ result.bio }} <br>
+            <a v-bind:href="result.blog" target="_blank" class="result__blog">{{ result.blog }}</a>
+        </p>
+    </div>
+    `
+})
+```
+
+Como ves dentro del componente existen referencias a propiedades y métodos que ya no existen dentro de su ámbito, ya que cada componente actúa como pieza aislada del resto del sistema. La forma en la que debemos satisfacer esas dependencias es a través de propiedades y eventos (una vez más, lo trataremos en profundidad más adelante).<br>
+
+Primero, debemos declarar y establecer esas propiedades y eventos en el propio componente.<br>
+
+```js
+app.component("app-profile", {
+    props: ['result', 'isFavorite'],
+    methods: {
+        addFavorite() {
+            this.$emit('add-favorite')
+        },
+        removeFavorite() {
+            this.$emit('remove-favorite')
+        }
+    },
+    template: `...`
+})
+```
+
+Luego, desde donde instanciamos el componente (**index.html**) pasamos de forma dinámica las propiedades y escuchamos los eventos.<br>
+
+```html
+<!-- Result -->
+<Transition>
+    <app-profile 
+        v-if="result"
+        :result="result"
+        :is-favorite="isFavorite"
+        @add-favorite="addFavorite"
+        @remove-favorite="removeFavorite" />
+</Transition>
+```
+
+De esta forma todo funciona exactamente igual que antes, pero podemos usar el componente en otras partes del proyecto, incluso en otros proyectos.<br>
+
+##Enlaces
+*https://vuejs.org/guide/essentials/component-basics.html#passing-props
+*https://marketplace.visualstudio.com/items?itemName=Tobermory.es6-string-html
