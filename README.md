@@ -193,9 +193,9 @@ https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Operators/Optiona
 
 **16.- Cachear favoritos**
 
-En esta lección vamos a implementar un sencillo mecanismo para evitar realizar la misma petición HTTP más de una vez.
-Ahora mismo, si buscamos el mismo nombre de usuario, lanzamos una nueva petición.
-Yo lo que quiero es, cuando se busca, preguntar si ese perfil de GitHub ya está en la lista de favoritos y, si es así, devolverlo en lugar de lanzar un request nuevo.
+En esta lección vamos a implementar un sencillo mecanismo para evitar realizar la misma petición HTTP más de una vez.<br>
+Ahora mismo, si buscamos el mismo nombre de usuario, lanzamos una nueva petición.<br>
+Yo lo que quiero es, cuando se busca, preguntar si ese perfil de GitHub ya está en la lista de favoritos y, si es así, devolverlo en lugar de lanzar un request nuevo.<br>
 Como los favoritos están guardados en un **Map**, podemos utilizar su método **get** para averiguar si existe en la lista.
 Pero en nuestro caso tenemos un problema: la clave que guardamos es la **id** y nosotros buscamos por nombre de usuario.
 La solución es sencilla, podemos cambiar todas las referencias de **id** por **login** y entonces funcionará.
