@@ -200,15 +200,15 @@ Como los favoritos están guardados en un **Map**, podemos utilizar su método *
 Pero en nuestro caso tenemos un problema: la clave que guardamos es la **id** y nosotros buscamos por nombre de usuario.
 La solución es sencilla, podemos cambiar todas las referencias de **id** por **login** y entonces funcionará.
 Luego, podemos hacer nuestra pregunta:
-´´´js
+```js
 const foundInFavorites = this.favorites.get(this.search)
 if (foundInFavorites) 
     return this.result = foundInFavorites
-´´´
+```
 De esta forma evitamos realizar la misma petición una y otra vez. Sin embargo, hay otro problema: si mantenemos un favorito de forma ilimitada, nunca podremos cargar nuevos datos. Por ejemplo, imagina que cambia su BIO o avatar: nunca lo sabríamos.
 Para solucionarlo vamos a implementar un temporizador. Si el perfil está en favoritos y no transcurrido el tiempo necesario, cargamos la información local. De lo contrario hacemos una nueva petición y reiniciamos el temporizador.
 
-´´´js
+```js
 const shouldRequestAgain = (() => {
   if (!!foundInFavorites) {
     const { lastRequestTime } = foundInFavorites
@@ -221,7 +221,7 @@ if (!!foundInFavorites && !shouldRequestAgain) {
   console.log("Found and we use the cached version")
   return this.result = foundInFavorites
 }
-´´´
+```
 Enlaces
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/get
 
