@@ -133,21 +133,21 @@ Con todo ello, ya podemos visualizar los favoritos que tenemos guardados en alma
 Enlaces importantes:
 Vue event handing
 
-15.- Transiciones con Vue 3
+**15.- Transiciones con Vue 3**
 
 El objetivo de esta lección es añadir fluidez a nuestra interfaz.
 Para ello vamos a hacer uso de las transiciones Vue, estas nos permiten animar la aparición y desaparición de elementos con la directiva **v-if**.
 El primer lugar donde implementar el componente transition-group estos ajustes es en la zona donde mostramos los favoritos.
-```
+```html
 <!-- Favorites -->
 <transition-group name="list">
     <div class="favorite" v-for="favorite in allFavorites" :key="favorite.id">
        ...
     </div>
 </transition-group>
-```html
-Necesitaremos también añadir selectores CSS apropiados para esta transición llamada list.
 ```
+Necesitaremos también añadir selectores CSS apropiados para esta transición llamada list.
+```css
 .list-move, /* apply transition to moving elements */
 .list-enter-active,
 .list-leave-active {
@@ -163,18 +163,18 @@ Necesitaremos también añadir selectores CSS apropiados para esta transición l
 .list-leave-active {
   position: absolute;
 }
-```css
-Para finalizar nos queda animar la aparición y desaparición de la zona donde se muestran los resultados de la búsqueda. En este caso usaremos transition en lugar de transition-group⁣, ya que no se trata de una lista.
 ```
+Para finalizar nos queda animar la aparición y desaparición de la zona donde se muestran los resultados de la búsqueda. En este caso usaremos transition en lugar de transition-group⁣, ya que no se trata de una lista.
+```html
 <!-- Result -->
 <Transition>
     <div class="result" v-if="result">
       ...
     </div>
 </Transition>
-```html
-Por supuesto, también necesitamos el código CSS adecuado. Como no hemos definido un nombre para la transición, podemos utilizar el nombre por defecto.
 ```
+Por supuesto, también necesitamos el código CSS adecuado. Como no hemos definido un nombre para la transición, podemos utilizar el nombre por defecto.
+```css
 .v-enter-active,
 .v-leave-active {
   transition: opacity 0.5s ease;
@@ -183,7 +183,7 @@ Por supuesto, también necesitamos el código CSS adecuado. Como no hemos defini
 .v-leave-to {
   opacity: 0;
 }
-```css
+```
 Y con tan poco esfuerzo hemos conseguido añadir transiciones a nuestra pequeña aplicación 😃.
 Enlaces
 https://vuejs.org/guide/built-ins/transition.html
