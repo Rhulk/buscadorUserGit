@@ -225,4 +225,38 @@ if (!!foundInFavorites && !shouldRequestAgain) {
 Enlaces
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/get
 
+**17.- Estilos CSS y atributos dinámicos**
 
+Nuestro objetivo en esta lección del Curso de Vue 3 es señalar cuando un resultado ya se encuentra entre los favoritos guardados.<br>
+Para ello tenemos clases CSS preparadas.<br>
+
+```css
+.favorite {
+  transition: transform 0.3s ease-out;
+}
+.favorite--selected {
+  transform: scale(1.3);
+}
+```
+
+Vamos a crear el nuevo método **checkFavorite**, que nos devuelva si el id de un resultado ya se encuentra dentro de los favoritos.
+
+
+```css
+checkFavorite(login) {
+    return this.result?.login === login
+}
+```
+
+
+Ahora solo tenemos que aplicarla la clase **favorite--selected** de forma dinámica. En la [documentación](https://vuejs.org/guide/essentials/class-and-style.html "documentación") puede ver que una de las formas más sencillas de conseguirlo es con la sintaxis de objeto. La parte de la izquierda (la key) sería la clase a aplicar y la derecha (el value) la expresión a comprobar. Si es verdadera, entonces aplicamos la clase (fíjate que usamos **v-bind** con el atributo **class** para hacerlo dinámico).
+
+
+```html
+<div class="favorite" :class="{'favorite--selected': checkFavorite(favorite.login)}">
+    ...
+</div>
+```
+
+## Enlaces
+* https://vuejs.org/guide/essentials/class-and-style.html
