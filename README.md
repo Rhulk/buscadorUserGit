@@ -145,7 +145,7 @@ El primer lugar donde implementar el componente transition-group estos ajustes e
        ...
     </div>
 </transition-group>
-```
+```html
 Necesitaremos también añadir selectores CSS apropiados para esta transición llamada list.
 ```
 .list-move, /* apply transition to moving elements */
@@ -163,7 +163,7 @@ Necesitaremos también añadir selectores CSS apropiados para esta transición l
 .list-leave-active {
   position: absolute;
 }
-```
+```css
 Para finalizar nos queda animar la aparición y desaparición de la zona donde se muestran los resultados de la búsqueda. En este caso usaremos transition en lugar de transition-group⁣, ya que no se trata de una lista.
 ```
 <!-- Result -->
@@ -172,7 +172,7 @@ Para finalizar nos queda animar la aparición y desaparición de la zona donde s
       ...
     </div>
 </Transition>
-```
+```html
 Por supuesto, también necesitamos el código CSS adecuado. Como no hemos definido un nombre para la transición, podemos utilizar el nombre por defecto.
 ```
 .v-enter-active,
@@ -183,7 +183,7 @@ Por supuesto, también necesitamos el código CSS adecuado. Como no hemos defini
 .v-leave-to {
   opacity: 0;
 }
-```
+```css
 Y con tan poco esfuerzo hemos conseguido añadir transiciones a nuestra pequeña aplicación 😃.
 Enlaces
 https://vuejs.org/guide/built-ins/transition.html
