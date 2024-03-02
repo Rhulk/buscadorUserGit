@@ -149,4 +149,10 @@
   .list-leave-active {
     position: absolute;
   }
-  
+
+  .favorite {
+    transition: transform 0.3s ease-out;
+  }
+  .favorite--selected {
+    transform: scale(1.3);
+  }
