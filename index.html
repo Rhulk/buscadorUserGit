@@ -13,49 +13,47 @@
 <body>
     <div id="app">
         <!-- Favorites -->
-            <div class="favorites" >
-                <transition-group name="list"> 
-                <div class="favorite" :class="{'favorite--selected': checkFavorite(favorite.login)}" v-for="favorite in allFavorites" :key="favorite.id">
-                    <a href="#" target="_blank" @click.prevent="showFavorite(favorite)">
+        <div class="favorites">
+            <transition-group name="list">
+                <div 
+                    class="favorite"
+                    :class="{'favorite--selected': checkFavorite(favorite.login)}"
+                    v-for="favorite in allFavorites" :key="favorite.id">
+                    <a @click.prevent="showFavorite(favorite)" href="#" target="_blank">
                         <img :src="favorite.avatar_url" :alt="favorite.name" class="favorite__avatar">
                     </a>
                 </div>
-                </transition-group>
-            </div>
-         
+            </transition-group>
+        </div>
 
         <!-- Content -->
         <article class="content">
-            <h1 class="content__title">{{message}} count: {{count}} </h1>
-            
+            <h1 class="content__title">Search GitHub users</h1>
+
             <!-- Search -->
             <form class="search" v-on:submit.prevent="doSearch">
                 <input v-model="search" type="text" class="search__input" required placeholder="Search GitHub users">
-                <input  type="submit" class="search__submit" value="Search">
+                <input type="submit" class="search__submit" value="Search">
             </form>
 
             <!-- Result -->
             <Transition>
-            <div class="result" v-if="result">
-                <a v-if="isFavorite" href="#" class="result__toggle-favorite" @click="removeFavorite">Remove Favorite
-                    ⭐️</a>
-                <a v-else href="#" class="result__toggle-favorite" @click="addFavorite">Add Favorite ⭐️</a>
-                <h2 class="result__name" >{{ result.name }}</h2>
-                <img v-bind:src="result.avatar_url" :alt="result.name" class="result__avatar">
-                <p class="result__bio">{{ result.bio }} <br>
-                    <a v-bind:href="result.blog" target="_blank" class="result__blog">{{ result.blog }}</a>
-                </p>
-            </div>
+                <app-profile 
+                    v-if="result" 
+                    :result="result"
+                    :is-favorite="isFavorite" 
+                    @add-favorite="addFavorite"
+                    @remove-favorite="removeFavorite" />
             </Transition>
+
             <!-- Error -->
-            <div class="result__error" v-if="error">
-                <h2 class="result__name">{{error}}</h2>
-            </div>
+            <div class="result__error" v-if="error">{{ error }}</div>
         </article>
     </div>
     <script src="js/main.js"></script>
+    <script src="js/components/AppProfile.js"></script>
     <script>
-        const mountedApp = app.mount("#app")
+        const mountedApp = app.mount('#app');
     </script>
 </body>
 

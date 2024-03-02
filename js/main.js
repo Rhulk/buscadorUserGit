@@ -5,6 +5,7 @@ const requestMaxTimeMs = 30000
 const app = Vue.createApp({
   data() {
     return {
+      message: "Find user:",
       search: null,
       result: null,
       error: null,
@@ -87,5 +88,3 @@ const app = Vue.createApp({
     }
   }
 });
-
-const mountedApp = app.mount("#app")
