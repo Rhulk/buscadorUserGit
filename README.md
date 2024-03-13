@@ -1,7 +1,7 @@
 #Lecciones del curso
 
-1.- Vue 3 desde cero
-
+1.- Demo del proyecto
+https://buscador-user-git.vercel.app
 
 2.- ¿Qué vas a aprender?
 
