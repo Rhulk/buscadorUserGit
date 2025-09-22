@@ -1,3 +1,385 @@
+/* --- NUEVO ESTILO PARA FORMULARIO TIPO PORTAL DE COCHES --- */
+.form-title {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #284e5e;
+  margin-bottom: 0.7rem;
+  text-align: center;
+}
+.search-bar-row {
+  margin-bottom: 0.7rem;
+}
+.search-bar {
+  width: 100%;
+  font-size: 1.05rem;
+  border-radius: 0.6rem;
+  border: 1.2px solid #b0bec5;
+  padding: 0.7rem 0.8rem;
+  box-shadow: 0 1px 2px rgba(40,62,81,0.05);
+  background: #f7fafd;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+.search-bar:focus {
+  border: 1.5px solid #1976d2;
+  box-shadow: 0 0 0 2px #e3f0fc;
+}
+.filters-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.6rem;
+  margin-bottom: 0.7rem;
+}
+@media (max-width: 900px) {
+  .filters-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 600px) {
+  .filters-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.filter {
+  width: 100%;
+  border-radius: 0.6rem;
+  border: 1.2px solid #b0bec5;
+  padding: 0.5rem 0.7rem;
+  background: #f7fafd;
+  font-size: 0.97rem;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+.filter:focus {
+  border: 1.5px solid #1976d2;
+  box-shadow: 0 0 0 2px #e3f0fc;
+}
+.extra-filters-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin: 0.7rem 0 0.7rem 0;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.color-filter, .type-filter, .distintivo-filter, .reservable-filter {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.7rem;
+}
+.color-options {
+  display: flex;
+  gap: 0.5rem;
+}
+.color-circle {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 2px solid #b0bec5;
+  cursor: pointer;
+  transition: border 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+.color-circle:focus, .color-circle.selected {
+  border: 2.5px solid #1976d2;
+  box-shadow: 0 0 0 2px #e3f0fc;
+}
+.type-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+.type-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.3rem 0.7rem;
+  border-radius: 0.7rem;
+  transition: background 0.2s;
+}
+.type-btn.selected, .type-btn:focus {
+  background: #e3f0fc;
+}
+.type-btn img {
+  width: 2.2rem;
+  height: 2.2rem;
+  margin-bottom: 0.2rem;
+}
+.distintivo-options {
+  display: flex;
+  gap: 0.5rem;
+}
+.distintivo-circle {
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  border: 2px solid #b0bec5;
+  font-weight: 700;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: #fff;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+.distintivo-0 { background: #00bcd4; color: #fff; }
+.distintivo-eco { background: #8bc34a; color: #fff; }
+.distintivo-b { background: #ffe082; color: #333; }
+.distintivo-c { background: #cddc39; color: #333; }
+.distintivo-circle.selected, .distintivo-circle:focus {
+  border: 2.5px solid #1976d2;
+  box-shadow: 0 0 0 2px #e3f0fc;
+}
+.reservable-filter {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.7rem;
+}
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 2.6rem;
+  height: 1.4rem;
+}
+.switch input { display: none; }
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #ccc;
+  border-radius: 1.4rem;
+  transition: .4s;
+}
+.switch input:checked + .slider {
+  background-color: #1976d2;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 1rem;
+  width: 1rem;
+  left: 0.2rem;
+  bottom: 0.2rem;
+  background-color: white;
+  border-radius: 50%;
+  transition: .4s;
+}
+.switch input:checked + .slider:before {
+  transform: translateX(1.2rem);
+}
+.form-actions-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+.clear-btn {
+  background: none;
+  border: none;
+  color: #1976d2;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: color 0.2s;
+}
+.clear-btn:hover {
+  color: #125ea2;
+}
+.results-btn {
+  background: #00ff6a;
+  color: #003c1c;
+  font-weight: 700;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 1.2rem;
+  padding: 1rem 2.5rem;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.10);
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.results-btn:hover {
+  background: #00e65a;
+}
+/* Wrapper para inputs con icono */
+.input-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+.input-wrapper .input-icon {
+  position: absolute;
+  left: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  color: #1976d2;
+  pointer-events: none;
+  z-index: 1;
+  user-select: none;
+}
+.input-wrapper input,
+.input-wrapper select {
+  padding-left: 2.5rem !important;
+  position: relative;
+  z-index: 2;
+  background: transparent;
+}
+/* --- CSS migrado desde index.html --- */
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+  .form-row {
+    margin-bottom: 1.2rem;
+  }
+/* removed duplicate .welcome-container:hover */
+/* removed duplicate .welcome-container in media query */
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.1rem;
+  align-items: flex-start;
+  width: 100%;
+  position: relative;
+  background: rgba(247,250,253,0.7);
+  border-radius: 1.2rem;
+  padding: 0.7rem 1.1rem 0.7rem 2.2rem;
+  box-shadow: 0 1px 6px rgba(40,62,81,0.06);
+  border: 1px solid #e3eafc;
+  transition: box-shadow 0.2s, border 0.2s;
+}
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  color: #283e51;
+  font-size: 1.08rem;
+}
+.form-group .help-text {
+  color: #1976d2;
+  font-size: 0.95rem;
+  margin-top: 0.1rem;
+  margin-bottom: 0.2rem;
+}
+.form-group .required {
+  color: #d32f2f;
+  font-size: 1rem;
+}
+.form-group input,
+.form-group select {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 0.7rem 1rem 0.7rem 2.5rem;
+  border-radius: 2rem;
+  border: 1.5px solid #b0bec5;
+  font-size: 1.04rem;
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
+  background: #f7fafd;
+  box-shadow: 0 1px 4px rgba(40,62,81,0.04);
+  max-width: 100%;
+  color: #283e51;
+  margin-bottom: 0.1rem;
+}
+.form-group input:focus,
+.form-group select:focus {
+  border: 1.5px solid #1976d2;
+  box-shadow: 0 0 0 2px #e3f0fc;
+  background: #eaf4fd;
+}
+.form-group input:invalid {
+  border: 1.5px solid #d32f2f;
+}
+.form-group input:focus:invalid {
+  box-shadow: 0 0 0 2px #ffd6d6;
+}
+.form-group .input-icon {
+  position: absolute;
+  left: 0.9rem;
+  top: 2.2rem;
+  font-size: 1.2rem;
+  color: #1976d2;
+  pointer-events: none;
+  transition: color 0.2s;
+}
+
+
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* Refactor: estilos de filas del formulario */
+.form-row {
+  display: flex;
+    font-weight: 500;
+    letter-spacing: 0.1px;
+    text-align: center;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  width: 100%;
+}
+.form-row .form-group {
+  flex: 1 1 180px;
+  min-width: 140px;
+}
+@media (max-width: 700px) {
+  .form-row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+  /* Buscador de vehículos */
+  .vehiculo-result {
+    margin-top: 2rem;
+    background: #f5f7fa;
+    border-radius: 1rem;
+    padding: 1.2rem 1rem;
+    color: #283e51;
+    min-height: 2.2rem;
+    box-shadow: 0 1px 4px rgba(40,62,81,0.07);
+    font-size: 1.05rem;
+  }
+  #vehiculo-search-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+  #vehiculo-search-form .search__input,
+  #vehiculo-search-form select {
+    flex: 1 1 120px;
+    min-width: 120px;
+    padding: 0.7rem 1rem;
+    border-radius: 2rem;
+    border: 1px solid #b0bec5;
+    font-size: 1rem;
+    outline: none;
+    transition: border 0.2s;
+    margin-bottom: 0;
+  }
+  #vehiculo-search-form .search__input:focus,
+  #vehiculo-search-form select:focus {
+    border: 1.5px solid #1976d2;
+  }
+  #vehiculo-search-form input[type="submit"] {
+    flex: 0 0 auto;
+    margin-left: 0.5rem;
+    margin-right: 0;
+    min-width: 120px;
+  }
 /* General */
 * {
     box-sizing: border-box;
@@ -13,8 +395,56 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: darkslateblue;
+    background: linear-gradient(135deg, #283e51 0%, #485563 100%);
     font-size: 1.3rem;
+    min-height: 100vh;
+  }
+
+  .welcome-container {
+    background: rgba(255,255,255,0.97);
+    padding: 1.2rem 1.2rem 1.2rem 1.2rem;
+    border-radius: 1.1rem;
+    box-shadow: 0 4px 16px 0 rgba(31, 38, 135, 0.18);
+    text-align: center;
+    max-width: 820px;
+    width: 98vw;
+    margin: 6rem auto 1.2rem auto;
+    animation: fadeIn 1.2s;
+    overflow: hidden;
+  }
+
+
+
+  .highlight {
+    color: #1976d2;
+    font-weight: bold;
+  }
+
+  .subtitle {
+    color: #485563;
+    margin-bottom: 2.2rem;
+    font-size: 1.1rem;
+  }
+
+  .start-btn {
+    display: inline-block;
+    padding: 0.8rem 2.2rem;
+    background: #1976d2;
+    color: #fff;
+    border-radius: 2rem;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.15);
+    transition: background 0.2s;
+  }
+  .start-btn:hover {
+    background: #125ea2;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
   }
   
   /* Content */
@@ -149,10 +579,108 @@
   .list-leave-active {
     position: absolute;
   }
+  .chips-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 0.5rem;
+    align-items: center;
+    min-height: 2.2rem;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    background: #f7fafd;
+    border: 1.2px solid #b0bec5;
+    border-radius: 1.2rem;
+    padding: 0.2rem 0.8rem 0.2rem 0.7rem;
+    font-size: 0.98rem;
+    color: #284e5e;
+    margin-right: 0.1rem;
+    margin-bottom: 0.1rem;
+    transition: background 0.2s, border 0.2s;
+  }
+  .chip-remove {
+    background: none;
+    border: none;
+    color: #1976d2;
+    font-size: 1.1rem;
+    margin-left: 0.4rem;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 1.2rem;
+    height: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+  .chip-remove:hover {
+    background: #e3eafc;
+  }
+  .chip-base {
+    color: #1976d2;
+    font-weight: 600;
+    margin-left: 0.3rem;
+    font-size: 1.01rem;
+  }
+  .search-chips-input {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    min-height: 2.6rem;
+    border: 1.2px solid #b0bec5;
+    border-radius: 0.7rem;
+    background: #f7fafd;
+    padding: 0.2rem 0.7rem 0.2rem 0.7rem;
+    gap: 0.3rem;
+    box-shadow: 0 1px 2px rgba(40,62,81,0.05);
+    cursor: text;
+    transition: border 0.2s, box-shadow 0.2s;
+  }
+  .search-chips-input:focus-within {
+    border: 1.5px solid #1976d2;
+    box-shadow: 0 0 0 2px #e3f0fc;
+  }
+  .search-chips-input input {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 1.05rem;
+    flex: 1;
+    min-width: 120px;
+    margin: 0.1rem 0;
+    padding: 0.3rem 0;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    background: #e3eafc;
+    border: 1.2px solid #b0bec5;
+    border-radius: 1.2rem;
+    padding: 0.1rem 0.7rem 0.1rem 0.7rem;
+    font-size: 0.98rem;
+    color: #284e5e;
+    margin-right: 0.1rem;
+    margin-bottom: 0.1rem;
+    transition: background 0.2s, border 0.2s;
+  }
+  .chip-remove {
+    background: none;
+    border: none;
+    color: #1976d2;
+    font-size: 1.1rem;
+    margin-left: 0.4rem;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 1.2rem;
+    height: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+  .chip-remove:hover {
+    background: #dbeafe;
+  }
 
-  .favorite {
-    transition: transform 0.3s ease-out;
-  }
-  .favorite--selected {
-    transform: scale(1.3);
-  }

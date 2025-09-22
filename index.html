@@ -1,60 +1,88 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitHub search</title>
+    <title>Buscador de Vehículos</title>
     <link rel="stylesheet" href="css/main.css">
-    <script src="https://unpkg.com/vue@3"></script>
 </head>
-
 <body>
-    <div id="app">
-        <!-- Favorites -->
-        <div class="favorites">
-            <transition-group name="list">
-                <div 
-                    class="favorite"
-                    :class="{'favorite--selected': checkFavorite(favorite.login)}"
-                    v-for="favorite in allFavorites" :key="favorite.id">
-                    <a @click.prevent="showFavorite(favorite)" href="#" target="_blank">
-                        <img :src="favorite.avatar_url" :alt="favorite.name" class="favorite__avatar">
-                    </a>
+    <div class="welcome-container">
+        <h1 class="form-title">¿Qué coche estás buscando?</h1>
+        <form id="vehiculo-search-form" autocomplete="off">
+            <div class="search-bar-row">
+                <div id="search-chips-input" class="search-chips-input" tabindex="0">
+                  <!-- Chips de filtros se renderizan aquí por JS -->
+                  <input type="text" id="vehiculo-marca-modelo" class="search__input search-bar" placeholder="Marca o modelo..." list="marcas-list" autocomplete="off" required style="flex:1;min-width:120px;background:transparent;border:none;outline:none;box-shadow:none;">
                 </div>
-            </transition-group>
-        </div>
-
-        <!-- Content -->
-        <article class="content">
-            <h1 class="content__title">Search GitHub users</h1>
-
-            <!-- Search -->
-            <form class="search" v-on:submit.prevent="doSearch">
-                <input v-model="search" type="text" class="search__input" required placeholder="Search GitHub users">
-                <input type="submit" class="search__submit" value="Search">
-            </form>
-
-            <!-- Result -->
-            <Transition>
-                <app-profile 
-                    v-if="result" 
-                    :result="result"
-                    :is-favorite="isFavorite" 
-                    @add-favorite="addFavorite"
-                    @remove-favorite="removeFavorite" />
-            </Transition>
-
-            <!-- Error -->
-            <div class="result__error" v-if="error">{{ error }}</div>
-        </article>
+            </div>
+            <div class="filters-grid">
+                <select class="filter" id="filtro-precio" title="Precio (€)"><option>Precio (€)</option></select>
+                <select class="filter" id="filtro-cuota" title="Cuota (€)"><option>Cuota (€/mes)</option></select>
+                <select class="filter" id="filtro-km" title="Kilómetros"><option>Kilómetros</option></select>
+                <select class="filter" id="vehiculo-anio" title="Año"><option>Año</option></select>
+                <select class="filter" id="filtro-provincia" title="Provincia"><option>Provincia</option></select>
+                <select class="filter" id="filtro-plazas" title="Plazas"><option>Plazas</option></select>
+                <select class="filter" id="vehiculo-combustible" title="Combustible"><option>Combustible</option></select>
+                <select class="filter" id="vehiculo-potencia" title="Potencia (CV)"><option>Potencia (CV)</option></select>
+                <select class="filter" id="filtro-cambio" title="Cambio"><option>Cambio</option></select>
+                <select class="filter" id="filtro-puertas" title="Puertas"><option>Puertas</option></select>
+                <select class="filter" id="filtro-vendedor" title="Vendedor"><option>Vendedor</option></select>
+            </div>
+            <div class="extra-filters-row">
+                <div class="color-filter">
+                    <span>Color</span>
+                    <div class="color-options">
+                        <button type="button" class="color-circle" style="background:#fff" title="Blanco"></button>
+                        <button type="button" class="color-circle" style="background:#000" title="Negro"></button>
+                        <button type="button" class="color-circle" style="background:#888" title="Gris"></button>
+                        <button type="button" class="color-circle" style="background:#2196f3" title="Azul"></button>
+                        <button type="button" class="color-circle" style="background:#e53935" title="Rojo"></button>
+                        <button type="button" class="color-circle" style="background:#795548" title="Marrón"></button>
+                        <button type="button" class="color-circle" style="background:#ffe082" title="Beige"></button>
+                        <button type="button" class="color-circle" style="background:#ffd600" title="Amarillo"></button>
+                        <button type="button" class="color-circle" style="background:#43a047" title="Verde"></button>
+                    </div>
+                </div>
+                <div class="type-filter">
+                    <span>Tipo</span>
+                    <div class="type-options">
+                        <button type="button" class="type-btn" title="Pequeños"><img src="icons/pequeno.svg" alt="Pequeños"><span>Pequeños</span></button>
+                        <button type="button" class="type-btn" title="Medianos"><img src="icons/mediano.svg" alt="Medianos"><span>Medianos</span></button>
+                        <button type="button" class="type-btn" title="Grandes"><img src="icons/grande.svg" alt="Grandes"><span>Grandes</span></button>
+                        <button type="button" class="type-btn" title="Familiares"><img src="icons/familiar.svg" alt="Familiares"><span>Familiares</span></button>
+                        <button type="button" class="type-btn" title="Monovolumen"><img src="icons/monovolumen.svg" alt="Monovolumen"><span>Monovolumen</span></button>
+                        <button type="button" class="type-btn" title="SUVs"><img src="icons/suv.svg" alt="SUVs"><span>SUVs</span></button>
+                        <button type="button" class="type-btn" title="Deportivos"><img src="icons/deportivo.svg" alt="Deportivos"><span>Deportivos</span></button>
+                        <button type="button" class="type-btn" title="Furgonetas"><img src="icons/furgoneta.svg" alt="Furgonetas"><span>Furgonetas</span></button>
+                    </div>
+                </div>
+                <div class="distintivo-filter">
+                    <span>Distintivo ambiental</span>
+                    <div class="distintivo-options">
+                        <button type="button" class="distintivo-circle distintivo-0" title="0 emisiones">0</button>
+                        <button type="button" class="distintivo-circle distintivo-eco" title="ECO">ECO</button>
+                        <button type="button" class="distintivo-circle distintivo-b" title="B">B</button>
+                        <button type="button" class="distintivo-circle distintivo-c" title="C">C</button>
+                    </div>
+                </div>
+                <div class="reservable-filter">
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                    <span>Ver coches reservables</span>
+                </div>
+            </div>
+            <div class="form-actions-row">
+                <button type="reset" class="clear-btn"><span>🗑️</span> Limpiar filtros</button>
+                <button type="submit" class="results-btn">VER 2032 RESULTADOS</button>
+            </div>
+        </form>
+        <datalist id="marcas-list"></datalist>
+        <datalist id="modelos-list"></datalist>
+        <div id="vehiculo-result" class="vehiculo-result"></div>
     </div>
     <script src="js/main.js"></script>
-    <script src="js/components/AppProfile.js"></script>
-    <script>
-        const mountedApp = app.mount('#app');
-    </script>
 </body>
-
 </html>
