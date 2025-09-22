@@ -13,21 +13,22 @@
             <div class="search-bar-row" style="display:flex;flex-direction:row;align-items:center;gap:0.7rem;width:100%;">
                 <div id="search-chips-input" class="search-chips-input" tabindex="0" style="flex:2 1 0;min-width:0;">
                   <!-- Chips de filtros se renderizan aquí por JS -->
-                  <input type="text" id="vehiculo-marca-modelo" class="search__input search-bar" placeholder="Marca..." list="marcas-list" autocomplete="off" required style="flex:1 1 0;min-width:120px;background:transparent;border:none;outline:none;box-shadow:none;">
+                  <input type="text" id="vehiculo-marca-modelo" class="search__input search-bar" placeholder="Marca..." list="marcas-list" autocomplete="off" style="flex:1 1 0;min-width:120px;background:transparent;border:none;outline:none;box-shadow:none;">
                 </div>
                 <div style="flex:1 1 0;min-width:0;">
                   <input type="text" id="vehiculo-modelo" class="search__input search-bar" placeholder="Modelo..." list="modelos-list" autocomplete="off" style="width:100%;min-width:120px;background:transparent;border:none;outline:none;box-shadow:none;">
                 </div>
             </div>
             <div class="filters-grid">
-                <select class="filter" id="filtro-precio" title="Precio (€)"><option>Precio (€)</option></select>
+                <input class="filter" id="vehiculo-precio" type="number" min="0" step="100" placeholder="Precio máximo (€)" style="width:100%;" />
                 <select class="filter" id="filtro-cuota" title="Cuota (€)"><option>Cuota (€/mes)</option></select>
                 <select class="filter" id="filtro-km" title="Kilómetros"><option>Kilómetros</option></select>
-                <select class="filter" id="vehiculo-anio" title="Año"><option>Año</option></select>
+                <select class="filter" id="vehiculo-anio-desde" title="Año desde"><option>Año desde</option></select>
+                <select class="filter" id="vehiculo-anio-hasta" title="Año hasta"><option>Año hasta</option></select>
                 <select class="filter" id="filtro-provincia" title="Provincia"><option>Provincia</option></select>
                 <select class="filter" id="filtro-plazas" title="Plazas"><option>Plazas</option></select>
                 <select class="filter" id="vehiculo-combustible" title="Combustible"><option>Combustible</option></select>
-                <select class="filter" id="vehiculo-potencia" title="Potencia (CV)"><option>Potencia (CV)</option></select>
+                <input class="filter" id="vehiculo-potencia" type="number" min="0" step="5" placeholder="Potencia mínima (CV)" style="width:100%;" />
                 <select class="filter" id="filtro-cambio" title="Cambio"><option>Cambio</option></select>
                 <select class="filter" id="filtro-puertas" title="Puertas"><option>Puertas</option></select>
                 <select class="filter" id="filtro-vendedor" title="Vendedor"><option>Vendedor</option></select>
@@ -79,7 +80,7 @@
             </div>
             <div class="form-actions-row">
                 <button type="reset" class="clear-btn"><span>🗑️</span> Limpiar filtros</button>
-                <button type="submit" class="results-btn">VER 2032 RESULTADOS</button>
+                <button type="submit" class="results-btn">Busqueda</button>
             </div>
         </form>
         <datalist id="marcas-list"></datalist>
