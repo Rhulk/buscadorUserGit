@@ -10,10 +10,13 @@
     <div class="welcome-container">
         <h1 class="form-title">¿Qué coche estás buscando?</h1>
         <form id="vehiculo-search-form" autocomplete="off">
-            <div class="search-bar-row">
-                <div id="search-chips-input" class="search-chips-input" tabindex="0">
+            <div class="search-bar-row" style="display:flex;flex-direction:row;align-items:center;gap:0.7rem;width:100%;">
+                <div id="search-chips-input" class="search-chips-input" tabindex="0" style="flex:2 1 0;min-width:0;">
                   <!-- Chips de filtros se renderizan aquí por JS -->
-                  <input type="text" id="vehiculo-marca-modelo" class="search__input search-bar" placeholder="Marca o modelo..." list="marcas-list" autocomplete="off" required style="flex:1;min-width:120px;background:transparent;border:none;outline:none;box-shadow:none;">
+                  <input type="text" id="vehiculo-marca-modelo" class="search__input search-bar" placeholder="Marca..." list="marcas-list" autocomplete="off" required style="flex:1 1 0;min-width:120px;background:transparent;border:none;outline:none;box-shadow:none;">
+                </div>
+                <div style="flex:1 1 0;min-width:0;">
+                  <input type="text" id="vehiculo-modelo" class="search__input search-bar" placeholder="Modelo..." list="modelos-list" autocomplete="off" style="width:100%;min-width:120px;background:transparent;border:none;outline:none;box-shadow:none;">
                 </div>
             </div>
             <div class="filters-grid">
@@ -85,4 +88,15 @@
     </div>
     <script src="js/main.js"></script>
 </body>
+<script type="text/javascript">
+
+function debug() {
+    console.log("Debug function called");
+    // Add more debug functionality as needed
+}
+
+debug();
+
+</script>
+
 </html>

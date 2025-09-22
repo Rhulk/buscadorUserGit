@@ -1,6 +1,8 @@
 // --- Buscador de Vehículos: JS para index.html ---
 document.addEventListener('DOMContentLoaded', function() {
-  // Marcas populares
+  let marcasSeleccionadas = [];
+  let modelosSeleccionados = [];
+  // Marcas populares y sistema de chips de marcas
   const marcasPopulares = [
     'Toyota', 'Volkswagen', 'Ford', 'Chevrolet', 'Honda', 'Nissan', 'Hyundai', 'Kia',
     'Renault', 'Mazda', 'Mercedes-Benz', 'BMW', 'Audi', 'Peugeot', 'Fiat', 'Jeep',
@@ -90,6 +92,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function getSelectedFilters() {
     const selected = [];
+    // Marcas seleccionadas como chips
+    marcasSeleccionadas.forEach(marca => selected.push(marca));
+    // Modelos seleccionados como chips
+    modelosSeleccionados.forEach(modelo => selected.push(modelo));
     filterSelectors.forEach(sel => {
       const el = document.querySelector(sel);
       if (el && el.value && el.value !== el.options[0]?.text) {
@@ -119,8 +125,34 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!chipsContainer || !mainInput) return;
     // Elimina chips previos
     chipsContainer.querySelectorAll('.chip').forEach(e => e.remove());
-    const selected = getSelectedFilters();
-    // Chips de filtros
+    // Chips de marcas
+    marcasSeleccionadas.forEach(marca => {
+      const chip = document.createElement('span');
+      chip.className = 'chip';
+      chip.setAttribute('data-chip', marca);
+      chip.innerHTML = `${marca}<button type="button" class="chip-remove" title="Quitar">×</button>`;
+      chipsContainer.insertBefore(chip, mainInput);
+      chip.querySelector('.chip-remove').addEventListener('click', function(e) {
+        e.stopPropagation();
+        marcasSeleccionadas = marcasSeleccionadas.filter(m => m !== marca);
+        renderChipsInsideInput();
+      });
+    });
+    // Chips de modelos
+    modelosSeleccionados.forEach(modelo => {
+      const chip = document.createElement('span');
+      chip.className = 'chip';
+      chip.setAttribute('data-chip', modelo);
+      chip.innerHTML = `${modelo}<button type="button" class="chip-remove" title="Quitar">×</button>`;
+      chipsContainer.insertBefore(chip, mainInput);
+      chip.querySelector('.chip-remove').addEventListener('click', function(e) {
+        e.stopPropagation();
+        modelosSeleccionados = modelosSeleccionados.filter(m => m !== modelo);
+        renderChipsInsideInput();
+      });
+    });
+    // Chips de otros filtros
+    const selected = getSelectedFilters().filter(f => !marcasSeleccionadas.includes(f) && !modelosSeleccionados.includes(f));
     for (let i = 0; i < selected.length; i++) {
       let filtro = selected[i];
       const chip = document.createElement('span');
@@ -130,8 +162,8 @@ document.addEventListener('DOMContentLoaded', function() {
       chipsContainer.insertBefore(chip, mainInput);
       chip.querySelector('.chip-remove').addEventListener('click', function(e) {
         e.stopPropagation();
-        console.log('Quitar filtro:', filtro); // Depuración
         removeFilterByValue(filtro);
+        renderChipsInsideInput();
       });
     }
     // Ajusta el input para que siempre esté al final
@@ -139,7 +171,7 @@ document.addEventListener('DOMContentLoaded', function() {
     mainInput.style.display = 'inline-block';
     mainInput.style.width = 'auto';
     mainInput.style.minWidth = '120px';
-    mainInput.value = mainInput.getAttribute('data-base') || '';
+    // No sobrescribir el valor del input mientras se escribe
   }
 
   // updateMainInput debe llamar a renderChipsInsideInput
@@ -151,7 +183,7 @@ document.addEventListener('DOMContentLoaded', function() {
   if (mainInput) {
     mainInput.addEventListener('input', function(e) {
       mainInput.setAttribute('data-base', e.target.value);
-      updateMainInput();
+      // No llamar a updateMainInput aquí para no sobrescribir mientras se escribe
     });
   }
 
@@ -161,20 +193,48 @@ document.addEventListener('DOMContentLoaded', function() {
   // Marcar selección en color, tipo, distintivo
   colorButtons.forEach(btn => {
     btn.addEventListener('click', function() {
-      btn.classList.toggle('selected');
-      updateMainInput();
+      if (btn.classList.contains('selected')) {
+        btn.classList.remove('selected');
+        // Solo llama si realmente estaba marcado
+        if (getSelectedFilters().includes(btn.title)) {
+          removeFilterByValue(btn.title);
+        } else {
+          updateMainInput();
+        }
+      } else {
+        btn.classList.add('selected');
+        updateMainInput();
+      }
     });
   });
   typeButtons.forEach(btn => {
     btn.addEventListener('click', function() {
-      btn.classList.toggle('selected');
-      updateMainInput();
+      if (btn.classList.contains('selected')) {
+        btn.classList.remove('selected');
+        if (getSelectedFilters().includes(btn.title)) {
+          removeFilterByValue(btn.title);
+        } else {
+          updateMainInput();
+        }
+      } else {
+        btn.classList.add('selected');
+        updateMainInput();
+      }
     });
   });
   distintivoButtons.forEach(btn => {
     btn.addEventListener('click', function() {
-      btn.classList.toggle('selected');
-      updateMainInput();
+      if (btn.classList.contains('selected')) {
+        btn.classList.remove('selected');
+        if (getSelectedFilters().includes(btn.title)) {
+          removeFilterByValue(btn.title);
+        } else {
+          updateMainInput();
+        }
+      } else {
+        btn.classList.add('selected');
+        updateMainInput();
+      }
     });
   });
   if (reservableSwitch) {
@@ -212,7 +272,205 @@ document.addEventListener('DOMContentLoaded', function() {
       reservableSwitch.checked = false;
       reservableSwitch.dispatchEvent(new Event('change'));
     }
-    updateMainInput();
+    // No llamar a updateMainInput aquí
+  }
+
+  // --- Mejorar listado de marcas seleccionables y chips ---
+  if (mainInput) {
+    // Autocompletado de marcas populares
+    mainInput.addEventListener('input', function(e) {
+      const val = e.target.value.trim();
+      const datalist = document.getElementById('marcas-list');
+      if (datalist) {
+        datalist.innerHTML = '';
+        if (val.length > 0) {
+          marcasPopulares.filter(m => m.toLowerCase().includes(val.toLowerCase())).forEach(marca => {
+            const opt = document.createElement('option');
+            opt.value = marca;
+            datalist.appendChild(opt);
+          });
+        } else {
+          marcasPopulares.forEach(marca => {
+            const opt = document.createElement('option');
+            opt.value = marca;
+            datalist.appendChild(opt);
+          });
+        }
+      }
+    });
+    // Permite añadir marca como chip al seleccionar con ratón una sugerencia
+    mainInput.addEventListener('change', async function(e) {
+      const val = mainInput.value.trim();
+      if (!val) return;
+      if (marcasSeleccionadas.includes(val)) {
+        // Feedback visual: input rojo y placeholder temporal
+        mainInput.value = '';
+        mainInput.classList.add('input-error');
+        const prevPlaceholder = mainInput.placeholder;
+        mainInput.placeholder = 'Marca ya añadida';
+        // Resetear datalist de marcas
+        const datalist = document.getElementById('marcas-list');
+        if (datalist) {
+          datalist.innerHTML = '';
+          marcasPopulares.forEach(marca => {
+            const opt = document.createElement('option');
+            opt.value = marca;
+            datalist.appendChild(opt);
+          });
+        }
+        setTimeout(() => {
+          mainInput.classList.remove('input-error');
+          mainInput.placeholder = prevPlaceholder;
+        }, 1200);
+        return;
+      }
+      marcasSeleccionadas.push(val);
+      mainInput.value = '';
+      mainInput.setAttribute('data-base', '');
+      // Resetear datalist de marcas
+      const datalist = document.getElementById('marcas-list');
+      if (datalist) {
+        datalist.innerHTML = '';
+        marcasPopulares.forEach(marca => {
+          const opt = document.createElement('option');
+          opt.value = marca;
+          datalist.appendChild(opt);
+        });
+      }
+      renderChipsInsideInput();
+      // --- Cargar modelos para la marca añadida ---
+      const modeloInput = document.getElementById('vehiculo-modelo');
+      const modelosList = document.getElementById('modelos-list');
+      if (modeloInput) modeloInput.value = '';
+      if (modelosList) {
+        modelosList.innerHTML = '';
+        try {
+          const res = await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformake/${encodeURIComponent(val)}?format=json`);
+          const data = await res.json();
+          if (data.Results && data.Results.length > 0) {
+            const modelosUnicos = Array.from(new Set(data.Results.map(m => m.Model_Name)));
+            modelosUnicos.forEach(modelo => {
+              const opt = document.createElement('option');
+              opt.value = modelo;
+              modelosList.appendChild(opt);
+            });
+          } else {
+            const opt = document.createElement('option');
+            opt.value = 'Sin modelos encontrados';
+            modelosList.appendChild(opt);
+          }
+        } catch (err) {
+          const opt = document.createElement('option');
+          opt.value = 'Error cargando modelos';
+          modelosList.appendChild(opt);
+        }
+      }
+    });
+    // Permite añadir marca personalizada como chip al presionar Enter
+    mainInput.addEventListener('keydown', async function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const val = mainInput.value.trim();
+        if (val && !marcasSeleccionadas.includes(val)) {
+          marcasSeleccionadas.push(val);
+          mainInput.value = '';
+          mainInput.setAttribute('data-base', '');
+          renderChipsInsideInput();
+          // --- Cargar modelos para la marca añadida ---
+          const modeloInput = document.getElementById('vehiculo-modelo');
+          const modelosList = document.getElementById('modelos-list');
+          if (modeloInput) modeloInput.value = '';
+          if (modelosList) {
+            modelosList.innerHTML = '';
+            try {
+              const res = await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformake/${encodeURIComponent(val)}?format=json`);
+              const data = await res.json();
+              if (data.Results && data.Results.length > 0) {
+                // Evita duplicados en el datalist
+                const modelosUnicos = Array.from(new Set(data.Results.map(m => m.Model_Name)));
+                modelosUnicos.forEach(modelo => {
+                  const opt = document.createElement('option');
+                  opt.value = modelo;
+                  modelosList.appendChild(opt);
+                });
+              } else {
+                const opt = document.createElement('option');
+                opt.value = 'Sin modelos encontrados';
+                modelosList.appendChild(opt);
+              }
+            } catch (err) {
+              const opt = document.createElement('option');
+              opt.value = 'Error cargando modelos';
+              modelosList.appendChild(opt);
+            }
+          }
+        }
+      }
+    });
+  }
+  // Permitir añadir modelo como chip al pulsar Enter en el input de modelo
+  const modeloInput = document.getElementById('vehiculo-modelo');
+  if (modeloInput) {
+    // Añadir modelo como chip al pulsar Enter
+    modeloInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const val = modeloInput.value.trim();
+        if (val && !modelosSeleccionados.includes(val)) {
+          modelosSeleccionados.push(val);
+          modeloInput.value = '';
+          renderChipsInsideInput();
+        }
+      }
+    });
+    // Añadir modelo como chip al seleccionar con ratón una sugerencia
+    modeloInput.addEventListener('change', async function(e) {
+      const val = modeloInput.value.trim();
+      if (!val) return;
+      if (modelosSeleccionados.includes(val)) {
+        // Feedback visual: input rojo y placeholder temporal
+        modeloInput.value = '';
+        modeloInput.classList.add('input-error');
+        const prevPlaceholder = modeloInput.placeholder;
+        modeloInput.placeholder = 'Modelo ya añadido';
+        // Resetear datalist de modelos filtrado por la última marca
+        const modelosList = document.getElementById('modelos-list');
+        if (modelosList && marcasSeleccionadas.length > 0) {
+          modelosList.innerHTML = '';
+          try {
+            const ultimaMarca = marcasSeleccionadas[marcasSeleccionadas.length - 1];
+            const res = await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformake/${encodeURIComponent(ultimaMarca)}?format=json`);
+            const data = await res.json();
+            if (data.Results && data.Results.length > 0) {
+              const modelosUnicos = Array.from(new Set(data.Results.map(m => m.Model_Name)));
+              modelosUnicos.forEach(modelo => {
+                const opt = document.createElement('option');
+                opt.value = modelo;
+                modelosList.appendChild(opt);
+              });
+            } else {
+              const opt = document.createElement('option');
+              opt.value = 'Sin modelos encontrados';
+              modelosList.appendChild(opt);
+            }
+          } catch (err) {
+            const opt = document.createElement('option');
+            opt.value = 'Error cargando modelos';
+            modelosList.appendChild(opt);
+          }
+        }
+        setTimeout(() => {
+          modeloInput.classList.remove('input-error');
+          modeloInput.placeholder = prevPlaceholder;
+        }, 1200);
+        return;
+      }
+      modelosSeleccionados.push(val);
+      modeloInput.value = '';
+      renderChipsInsideInput();
+    });
   }
 });
+/* Añadir en el CSS para el feedback visual */
+/* .input-error { border: 1.5px solid #d32f2f !important; background: #fff0f0 !important; } */
 
