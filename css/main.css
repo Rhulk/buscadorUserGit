@@ -683,4 +683,25 @@ html, body {
   .chip-remove:hover {
     background: #dbeafe;
   }
+.result-card {
+  background: #f7fafd;
+  border-radius: 0.7rem;
+  margin: 0.7rem 0;
+  padding: 0.7rem 1rem;
+  box-shadow: 0 1px 4px rgba(40,62,81,0.07);
+  border: 1px solid #e3eafc;
+  font-size: 1.05rem;
+  color: #284e5e;
+  transition: box-shadow 0.2s;
+}
+.result-card:hover {
+  box-shadow: 0 4px 16px 0 rgba(31, 38, 135, 0.13);
+  background: #e3f0fc;
+}
+.result-card b {
+  color: #1976d2;
+}
+.result-card span {
+  color: #485563;
+}
 

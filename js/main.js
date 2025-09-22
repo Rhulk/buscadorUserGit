@@ -52,30 +52,92 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+  // Rellenar selects de años para rango
+  const anioDesdeSelect = document.getElementById('vehiculo-anio-desde');
+  const anioHastaSelect = document.getElementById('vehiculo-anio-hasta');
+  if (anioDesdeSelect && anioHastaSelect) {
+    const currentYear = new Date().getFullYear();
+    anioDesdeSelect.innerHTML = '<option>Año desde</option>';
+    anioHastaSelect.innerHTML = '<option>Año hasta</option>';
+    for (let y = currentYear; y >= 1990; y--) {
+      const opt1 = document.createElement('option');
+      opt1.value = y;
+      opt1.textContent = y;
+      anioDesdeSelect.appendChild(opt1);
+      const opt2 = document.createElement('option');
+      opt2.value = y;
+      opt2.textContent = y;
+      anioHastaSelect.appendChild(opt2);
+    }
+  }
+
+  // --- Simulación de API de coches de segunda mano ---
+  function fetchFakeCochesAPI({ marcas, modelos, anioDesde, anioHasta, tipo, combustible, potencia, precio }) {
+    // Array de datos de prueba
+    const base = [
+      { marca: 'Toyota', modelo: 'Corolla', anio: '2019', precio: '13.500 €', combustible: 'Gasolina', tipo: 'Turismo', potencia: '110 CV', km: 45000 },
+      { marca: 'Toyota', modelo: 'Yaris', anio: '2018', precio: '10.900 €', combustible: 'Híbrido', tipo: 'Turismo', potencia: '100 CV', km: 60000 },
+      { marca: 'Ford', modelo: 'Focus', anio: '2020', precio: '15.200 €', combustible: 'Diésel', tipo: 'Turismo', potencia: '120 CV', km: 38000 },
+      { marca: 'BMW', modelo: 'Serie 1', anio: '2017', precio: '16.800 €', combustible: 'Gasolina', tipo: 'Compacto', potencia: '136 CV', km: 52000 },
+      { marca: 'Seat', modelo: 'Ibiza', anio: '2018', precio: '9.800 €', combustible: 'Gasolina', tipo: 'Turismo', potencia: '90 CV', km: 70000 },
+      { marca: 'Renault', modelo: 'Clio', anio: '2019', precio: '11.500 €', combustible: 'Gasolina', tipo: 'Turismo', potencia: '75 CV', km: 48000 },
+      { marca: 'Volkswagen', modelo: 'Golf', anio: '2021', precio: '19.900 €', combustible: 'Gasolina', tipo: 'Turismo', potencia: '130 CV', km: 21000 },
+      { marca: 'Peugeot', modelo: '208', anio: '2020', precio: '13.200 €', combustible: 'Gasolina', tipo: 'Turismo', potencia: '100 CV', km: 35000 },
+      { marca: 'Kia', modelo: 'Ceed', anio: '2019', precio: '12.700 €', combustible: 'Diésel', tipo: 'Turismo', potencia: '115 CV', km: 41000 },
+      { marca: 'Hyundai', modelo: 'i30', anio: '2018', precio: '11.900 €', combustible: 'Gasolina', tipo: 'Turismo', potencia: '100 CV', km: 65000 }
+    ];
+    // Filtrado simple por los filtros recibidos
+    return base.filter(coche =>
+      (!marcas.length || marcas.includes(coche.marca)) &&
+      (!modelos.length || modelos.includes(coche.modelo)) &&
+      (!anioDesde || parseInt(coche.anio) >= parseInt(anioDesde)) &&
+      (!anioHasta || parseInt(coche.anio) <= parseInt(anioHasta)) &&
+      (!tipo || coche.tipo === tipo) &&
+      (!combustible || coche.combustible === combustible) &&
+      (!potencia || parseInt(coche.potencia) >= parseInt(potencia)) &&
+      (!precio || parseInt(coche.precio.replace(/\D/g, '')) <= parseInt(precio.replace(/\D/g, '') || 999999))
+    );
+  }
+
   const form = document.getElementById('vehiculo-search-form');
   if (form) {
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', async function(e) {
       e.preventDefault();
-      const marca = document.getElementById('vehiculo-marca').value.trim();
-      const modelo = document.getElementById('vehiculo-modelo').value.trim();
-      const anio = document.getElementById('vehiculo-anio').value.trim();
-      const tipo = document.getElementById('vehiculo-tipo').value;
-      const combustible = document.getElementById('vehiculo-combustible').value;
-      const potencia = document.getElementById('vehiculo-potencia').value;
-      const precio = document.getElementById('vehiculo-precio').value;
+      // Solo ejecuta la búsqueda si el submit viene del botón de búsqueda
+      const submitter = e.submitter || document.activeElement;
+      if (!submitter || !submitter.classList.contains('results-btn')) return;
+      // Recoge filtros seleccionados
+      const marcas = marcasSeleccionadas;
+      const modelos = modelosSeleccionados;
+      const anioDesdeRaw = document.getElementById('vehiculo-anio-desde')?.value;
+      const anioHastaRaw = document.getElementById('vehiculo-anio-hasta')?.value;
+      const tipoRaw = document.getElementById('vehiculo-tipo')?.value;
+      const combustibleRaw = document.getElementById('vehiculo-combustible')?.value;
+      const potenciaRaw = document.getElementById('vehiculo-potencia')?.value;
+      const precioRaw = document.getElementById('vehiculo-precio')?.value;
+      // Normalizar selects con placeholder
+      const anioDesde = (anioDesdeRaw && anioDesdeRaw !== 'Año desde') ? anioDesdeRaw : '';
+      const anioHasta = (anioHastaRaw && anioHastaRaw !== 'Año hasta') ? anioHastaRaw : '';
+      const tipo = (tipoRaw && tipoRaw !== 'Tipo') ? tipoRaw : '';
+      const combustible = (combustibleRaw && combustibleRaw !== 'Combustible') ? combustibleRaw : '';
+      const potencia = potenciaRaw || '';
+      const precio = precioRaw || '';
       const resultDiv = document.getElementById('vehiculo-result');
-      if(marca || modelo || anio || tipo || combustible || potencia || precio) {
-        let resumen = `<b>Marca:</b> ${marca || '-'}<br>`;
-        resumen += `<b>Modelo:</b> ${modelo || '-'}<br>`;
-        resumen += `<b>Año:</b> ${anio || '-'}<br>`;
-        resumen += `<b>Tipo:</b> ${tipo ? tipo.charAt(0).toUpperCase() + tipo.slice(1) : '-'}<br>`;
-        resumen += `<b>Combustible:</b> ${combustible ? combustible.charAt(0).toUpperCase() + combustible.slice(1) : '-'}<br>`;
-        resumen += `<b>Potencia:</b> ${potencia ? potencia + ' HP' : '-'}<br>`;
-        resumen += `<b>Precio:</b> ${precio ? '$' + precio : '-'}<br>`;
-        resultDiv.innerHTML = `<p>Mostrando resultados para:</p><div>${resumen}</div>`;
-      } else {
-        resultDiv.innerHTML = '';
+      // Llama a la función simulada
+      const resultados = fetchFakeCochesAPI({ marcas, modelos, anioDesde, anioHasta, tipo, combustible, potencia, precio });
+      if (resultados.length === 0) {
+        resultDiv.innerHTML = '<p>No se encontraron resultados.</p>';
+        return;
       }
+      // Renderiza resultados
+      resultDiv.innerHTML = '<h3>Resultados de segunda mano:</h3>' +
+        resultados.map(r => `
+          <div class="result-card">
+            <b>${r.marca} ${r.modelo !== '-' ? r.modelo : ''}</b> - ${r.anio}<br>
+            <span>Precio: <b>${r.precio}</b></span> | Km: ${r.km}<br>
+            <span>${r.combustible} | ${r.tipo} | ${r.potencia}</span>
+          </div>
+        `).join('');
     });
   }
 
@@ -470,7 +532,42 @@ document.addEventListener('DOMContentLoaded', function() {
       renderChipsInsideInput();
     });
   }
+
+  // Limpiar filtros
+  const clearBtn = document.querySelector('.clear-btn');
+  if (clearBtn) {
+    clearBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      // Vaciar chips
+      marcasSeleccionadas = [];
+      modelosSeleccionados = [];
+      renderChipsInsideInput();
+      // Limpiar inputs
+      document.getElementById('vehiculo-marca-modelo').value = '';
+      document.getElementById('vehiculo-modelo').value = '';
+      // Limpiar selects y datalists
+      const selects = document.querySelectorAll('.filters-grid select');
+      selects.forEach(sel => sel.selectedIndex = 0);
+      // Limpiar inputs numéricos
+      const numInputs = document.querySelectorAll('.filters-grid input[type="number"]');
+      numInputs.forEach(inp => inp.value = '');
+      // Limpiar colores, tipos, distintivos
+      document.querySelectorAll('.color-circle.selected, .type-btn.selected, .distintivo-circle.selected').forEach(el => el.classList.remove('selected'));
+      // Limpiar reservable
+      const reservable = document.querySelector('.reservable-filter input[type="checkbox"]');
+      if (reservable) reservable.checked = false;
+      // Resetear datalists
+      cargarMarcas();
+      const modelosList = document.getElementById('modelos-list');
+      if (modelosList) modelosList.innerHTML = '';
+      // Limpiar resultados
+      const resultDiv = document.getElementById('vehiculo-result');
+      if (resultDiv) resultDiv.innerHTML = '';
+    });
+  }
 });
 /* Añadir en el CSS para el feedback visual */
 /* .input-error { border: 1.5px solid #d32f2f !important; background: #fff0f0 !important; } */
+/* Añade en tu CSS para .result-card si quieres mejor visual */
+/* .result-card { background: #f7fafd; border-radius: 0.7rem; margin: 0.7rem 0; padding: 0.7rem 1rem; box-shadow: 0 1px 4px rgba(40,62,81,0.07); } */
 
